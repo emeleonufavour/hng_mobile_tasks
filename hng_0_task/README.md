@@ -16,7 +16,7 @@ A Flutter mobile app that provides quick access to HNG resources and links.
 
   ```bash
   git clone https://github.com/emeleonufavour/hng_mobile_tasks.git
-  cd hng-mobile-app
+  cd hng_mobile_tasks
   ```
 
 - Install dependencies
