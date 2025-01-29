@@ -2,9 +2,9 @@
 
 This repository contains my tasks for the HNG-12 internship program
 
-# App demo links
+# Stages
 
-The following are the links to the application for each stage hosted on [Appetizer](https://appetize.io/)
+The following are relevant links for each stage
 
 ## Stage 0
 
