@@ -10,3 +10,9 @@ The following are relevant links for each stage
 
 - [App on Appetizor](https://appetize.io/app/b_6kgkcyvn3xw6ak5mg6godcez64)
 - [Link to repository](https://github.com/emeleonufavour/hng_mobile_tasks/tree/main/hng_0_task)
+
+## Stage 2
+
+- [App on Appetizor](https://appetize.io/app/b_unrxyihb2w5thwuuyaubvda2ea)
+- [Link to repository](https://github.com/emeleonufavour/hng_mobile_tasks/tree/main/hng_2_task)
+
