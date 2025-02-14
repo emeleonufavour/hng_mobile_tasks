@@ -26,3 +26,12 @@ class ApplyFilters extends CountriesEvent {
   @override
   List<Object?> get props => [filters];
 }
+
+class ChangeLocale extends CountriesEvent {
+  final String locale;
+
+  ChangeLocale(this.locale);
+
+  @override
+  List<Object?> get props => [locale];
+}

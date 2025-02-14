@@ -24,6 +24,7 @@ class CountriesView extends StatelessWidget {
               child: Center(
                 child: Column(
                   children: [
+                    (MediaQuery.sizeOf(context).height * 0.4).verticalSpace,
                     TextWidget("Uh oh! We could not get the countries for you"),
                     5.h.verticalSpace,
                     TextWidget("Pull this screen down, let's try again!"),
@@ -72,17 +73,18 @@ class CountriesView extends StatelessWidget {
                       ],
                     ),
                     Container(
+                      padding: EdgeInsets.all(2),
                       decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.surface,
                           shape: BoxShape.circle),
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
-                        child: IconButton(
+                        child: GestureDetector(
                           key: ValueKey(
                               context.watch<ThemeProvider>().isDarkMode),
-                          onPressed: () =>
+                          onTap: () =>
                               context.read<ThemeProvider>().toggleTheme(),
-                          icon: Icon(context.watch<ThemeProvider>().isDarkMode
+                          child: Icon(context.watch<ThemeProvider>().isDarkMode
                               ? Icons.dark_mode_outlined
                               : Icons.wb_sunny_outlined),
                         ),
@@ -98,7 +100,7 @@ class CountriesView extends StatelessWidget {
                 ).padding(top: 15.h, bottom: 10.h),
                 Expanded(
                   child: GroupedCountryList(
-                    countryList: state.response.data,
+                    countryList: state.countries,
                   ),
                 ),
               ],

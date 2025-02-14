@@ -7,7 +7,7 @@ class CountryRepoImpl extends CountryRepository with RepositoryErrorHandler {
   CountryRepoImpl({required this.countryRemoteDatasource});
 
   @override
-  Future<Either<Failure, PaginatedResponse<Country>>> getCountries(
+  Future<Either<Failure, List<Country>>> getCountries(
       {int? page, int? perPage}) async {
     return callAction(() => countryRemoteDatasource.getCountries());
   }

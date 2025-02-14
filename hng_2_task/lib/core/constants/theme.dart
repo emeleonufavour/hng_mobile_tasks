@@ -33,6 +33,11 @@ class CountryAppTheme {
         side: BorderSide(color: Palette.grey500, width: 2),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
         checkColor: WidgetStatePropertyAll(Palette.white)),
+    radioTheme: RadioThemeData(
+      fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+        return Palette.grey500;
+      }),
+    ),
     textTheme: TextTheme(
       bodyLarge: TextStyle(color: Palette.black),
     ),
@@ -43,7 +48,7 @@ class CountryAppTheme {
     brightness: Brightness.dark,
     scaffoldBackgroundColor: Palette.darkScaffold,
     colorScheme: ColorScheme.dark(
-        primary: const Color(0xffFF6C00),
+        primary: const Color(0xffFF6C00).withValues(alpha: 0.8),
         secondary: Palette.grey400,
         background: Colors.grey[800]!,
         surface: Palette.grey200,
@@ -59,6 +64,11 @@ class CountryAppTheme {
         side: BorderSide(color: Palette.grey300, width: 2),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
         checkColor: WidgetStatePropertyAll(Palette.darkScaffold)),
+    radioTheme: RadioThemeData(
+      fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+        return Palette.grey300;
+      }),
+    ),
     textTheme: TextTheme(
       bodyLarge: TextStyle(color: Palette.white),
     ),

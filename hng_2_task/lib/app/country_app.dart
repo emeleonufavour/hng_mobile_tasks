@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:hng_2_task/core/core.dart';
 import 'package:hng_2_task/features/features.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
 
 class CountryApp extends StatelessWidget {
-  final List<SingleChildWidget> providers;
-  const CountryApp({required this.providers, super.key});
+  const CountryApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: providers,
+      providers: CountryProviders.providers,
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
           return MaterialApp(

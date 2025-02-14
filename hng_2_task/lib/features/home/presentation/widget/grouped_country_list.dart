@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hng_2_task/core/core.dart';
 import 'package:hng_2_task/features/features.dart';
 
@@ -8,16 +7,17 @@ class GroupedCountryList extends StatelessWidget {
 
   const GroupedCountryList({required this.countryList, super.key});
 
-  Map<String, List<Country>> _groupCountries() {
+  Map<String, List<Country>> _groupCountries(List<Country> countryList) {
     final groupedMap = <String, List<Country>>{};
 
     final sortedCountries = List<Country>.from(countryList)
-      ..sort((a, b) => (a.name ?? '').compareTo(b.name ?? ''));
+      ..sort((a, b) => (a.name?.common ?? '').compareTo(b.name?.common ?? ''));
 
     for (var country in sortedCountries) {
-      if (country.name == null || country.name!.isEmpty) continue;
+      final name = country.name?.common;
+      if (name == null || name.isEmpty) continue;
 
-      final firstLetter = country.name![0].toUpperCase();
+      final firstLetter = name[0].toUpperCase();
       if (!groupedMap.containsKey(firstLetter)) {
         groupedMap[firstLetter] = [];
       }
@@ -30,7 +30,7 @@ class GroupedCountryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final groupedCountries = _groupCountries();
+    final groupedCountries = _groupCountries(countryList);
 
     return ListView.builder(
       itemCount: groupedCountries.length,
@@ -52,7 +52,6 @@ class GroupedCountryList extends StatelessWidget {
             ),
             ...countries.map((country) => GestureDetector(
                   onTap: () {
-                    context.read<StatesBloc>().add(LoadStates(country.name!));
                     goTo(CountryDetailsView.route, arguments: country);
                   },
                   child: CountryTile(country: country),

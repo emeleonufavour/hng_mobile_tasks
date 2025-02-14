@@ -55,3 +55,7 @@ extension WidgetExtension on Widget {
     );
   }
 }
+
+extension TimezoneParsing on String {
+  String get cleanTimezone => replaceAll('UTC', '').trim();
+}

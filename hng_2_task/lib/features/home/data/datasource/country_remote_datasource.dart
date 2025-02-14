@@ -3,10 +3,7 @@ import 'package:hng_2_task/core/core.dart';
 import 'package:hng_2_task/features/features.dart';
 
 abstract interface class CountryRemoteDatasource {
-  Future<PaginatedResponse<Country>> getCountries({
-    int? page,
-    int? perPage,
-  });
+  Future<List<Country>> getCountries();
 }
 
 class CountryRemoteDatasourceImpl extends CountryRemoteDatasource {
@@ -15,41 +12,29 @@ class CountryRemoteDatasourceImpl extends CountryRemoteDatasource {
   CountryRemoteDatasourceImpl({required this.dio});
 
   @override
-  Future<PaginatedResponse<Country>> getCountries(
-      {int? page, int? perPage}) async {
+  Future<List<Country>> getCountries() async {
     try {
-      final response = await dio.get(ApiConstants.countries, queryParameters: {
-        'page': page,
-        'per_page': perPage,
-      });
+      final response = await dio.get(ApiConstants.countries);
 
       final data = response.data;
       if (data == null) {
         throw BaseFailures(message: 'Response data is null');
       }
 
-      final dataList = data['data'];
-      if (dataList == null || dataList is! List) {
+      if (data is! List) {
         throw BaseFailures(message: 'Invalid or missing data format');
       }
 
-      final List<Country> countries = dataList
-          .map((json) => CountryModel.fromJson(Map<String, dynamic>.from(json)))
+      final List<Country> countries = data
+          .map<Country>(
+              (json) => CountryModel.fromJson(Map<String, dynamic>.from(json)))
           .toList();
 
-      AppLogger.log("Countries: $countries");
+      AppLogger.log("Countries: ${countries[0]}");
 
-      return PaginatedResponse(
-        data: countries,
-        links: data['links'] != null
-            ? PaginationLinks.fromJson(data['links'])
-            : PaginationLinks.fromJson({}),
-        meta: data['meta'] != null
-            ? PaginationMeta.fromJson(data['meta'])
-            : PaginationMeta.fromJson({}),
-      );
-    } catch (e) {
-      AppLogger.log("Error in getCountries: $e");
+      return countries;
+    } catch (e, stackTrace) {
+      AppLogger.log("Error in getCountries: $e\n$stackTrace");
       throw BaseFailures(message: e.toString());
     }
   }

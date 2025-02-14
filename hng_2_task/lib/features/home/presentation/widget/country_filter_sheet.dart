@@ -12,6 +12,7 @@ class CountryFilterSheet extends StatefulWidget {
 
 class _CountryFilterSheetState extends State<CountryFilterSheet> {
   Set<String> selectedContinents = {};
+  Set<String> selectedTimezones = {};
 
   final continents = [
     'Africa',
@@ -23,8 +24,51 @@ class _CountryFilterSheetState extends State<CountryFilterSheet> {
     'South America',
   ];
 
+  final timezones = [
+    'UTC-12:00',
+    'UTC-11:00',
+    'UTC-10:00',
+    'UTC-9:30',
+    'UTC-9:00',
+    'UTC-8:00',
+    'UTC-7:00',
+    'UTC-6:00',
+    'UTC-5:00',
+    'UTC-4:30',
+    'UTC-4:00',
+    'UTC-3:30',
+    'UTC-3:00',
+    'UTC-2:00',
+    'UTC-1:00',
+    'UTC+0:00',
+    'UTC+1:00',
+    'UTC+2:00',
+    'UTC+3:00',
+    'UTC+3:30',
+    'UTC+4:00',
+    'UTC+4:30',
+    'UTC+5:00',
+    'UTC+5:30',
+    'UTC+5:45',
+    'UTC+6:00',
+    'UTC+6:30',
+    'UTC+7:00',
+    'UTC+8:00',
+    'UTC+8:45',
+    'UTC+9:00',
+    'UTC+9:30',
+    'UTC+10:00',
+    'UTC+10:30',
+    'UTC+11:00',
+    'UTC+12:00',
+    'UTC+12:45',
+    'UTC+13:00',
+    'UTC+14:00',
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
@@ -44,10 +88,7 @@ class _CountryFilterSheetState extends State<CountryFilterSheet> {
                   fontWeight: FontWeight.w700,
                   fontSize: 20.sp,
                 ),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context),
-                ),
+                BottomSheetBackButton()
               ],
             ),
           ),
@@ -86,8 +127,55 @@ class _CountryFilterSheetState extends State<CountryFilterSheet> {
                         });
                       }),
                 ],
-              ).padding(horizontal: 16.w);
+              ).padding(left: 16.w, right: 12.w);
             }).toList(),
+          ),
+          ExpansionTile(
+            initiallyExpanded: false,
+            iconColor: Theme.of(context).colorScheme.secondary,
+            shape: const RoundedRectangleBorder(
+              side: BorderSide.none,
+            ),
+            clipBehavior: Clip.none,
+            title: TextWidget(
+              'Timezone',
+              fontWeight: FontWeight.w700,
+              fontSize: 16.sp,
+            ),
+            children: [
+              SizedBox(
+                height: (size.height * .2),
+                child: ListView(
+                  children: timezones.map((timezone) {
+                    final isSelected = selectedTimezones.contains(timezone);
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextWidget(
+                          timezone,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16.sp,
+                          textColor:
+                              Theme.of(context).checkboxTheme.side!.color,
+                        ),
+                        Checkbox.adaptive(
+                          value: isSelected,
+                          onChanged: (v) {
+                            setState(() {
+                              if (isSelected) {
+                                selectedTimezones.remove(timezone);
+                              } else {
+                                selectedTimezones.add(timezone);
+                              }
+                            });
+                          },
+                        ),
+                      ],
+                    ).padding(left: 16.w, right: 12.w);
+                  }).toList(),
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: EdgeInsets.all(16.w),
@@ -137,6 +225,9 @@ class _CountryFilterSheetState extends State<CountryFilterSheet> {
                                 continents: selectedContinents.isEmpty
                                     ? null
                                     : selectedContinents.toList(),
+                                timezones: selectedTimezones.isEmpty
+                                    ? null
+                                    : selectedTimezones.toList(),
                               ),
                             ),
                           );

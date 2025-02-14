@@ -7,16 +7,26 @@ A Flutter mobile app that gives you the ability to view countries and their info
 - Name
 - States
 - Flag
+- Region
 - Population
 - Capital city
 - Current president
 - Continent
 - Country code
+- Languages
+- Currency
+- Start of week
+- Independent
+- Area
+- Timezone
+- Driving side
 
 ## ✨ Features
 
 - [x] Search for countries based on name
 - [x] Filter countries based on continent
+- [x] Filter countries based on timezone
+- [x] See country name in your preferred language
 
 ## 📸 ScreenShots
 
@@ -25,6 +35,8 @@ A Flutter mobile app that gives you the ability to view countries and their info
 | <img src="assets/image/1_l.png" width="300"> | <img src="assets/image/1_d.png" width="300"> |
 | <img src="assets/image/2_l.png" width="300"> | <img src="assets/image/2_d.png" width="300"> |
 | <img src="assets/image/3_l.png" width="300"> | <img src="assets/image/3_d.png" width="300"> |
+| <img src="assets/image/4_l.png" width="300"> | <img src="assets/image/4_d.png" width="300"> |
+| <img src="assets/image/5_l.png" width="300"> | <img src="assets/image/5_d.png" width="300"> |
 
 ## Dependencies used
 
@@ -35,7 +47,6 @@ A Flutter mobile app that gives you the ability to view countries and their info
 - [**flutter_bloc**](https://pub.dev/packages/flutter_bloc) - App wide state management solution
 - [**provider**](https://pub.dev/packages/provider) - State management solution for configuring App theme
 - [**dio**](https://pub.dev/packages/dio) - HTTP client for API calls
-- [**flutter_dotenv**](https://pub.dev/packages/flutter_dotenv) - Environment variables management
 - [**google_fonts**](https://pub.dev/packages/google_fonts) - Custom fonts support
 - [**equatable**](https://pub.dev/packages/equatable) - Simplified equality comparisons
 
@@ -60,29 +71,7 @@ A Flutter mobile app that gives you the ability to view countries and their info
   flutter pub get
   ```
 
-## 🔑 Environment Variables
-
-This project uses environment variables to store the API key. Follow the steps below to set up your `.env` file correctly.
-
-### Create a `.env` file
-
-In the root directory of the project, create a new file named `.env`. You can do this manually or run the following command:
-
-```bash
-touch .env
-```
-
-### Add the required API key
-
-Visit https://restfulcountries.com/request-access-token to generate an API key
-
-In the .env file, add your API key
-
-```bash
-API_KEY=your_api_key_here
-```
-
-### Run the app
+- Run the app
 
 ```bash
 flutter run

@@ -1,5 +1,4 @@
 class ApiConstants {
-  static const String baseUrl = 'https://restfulcountries.com/api/v1';
-  static const String countries = '/countries';
-  static String states(String country) => '/countries/$country/states';
+  static const String baseUrl = 'https://restcountries.com/v3.1';
+  static const String countries = '/all';
 }

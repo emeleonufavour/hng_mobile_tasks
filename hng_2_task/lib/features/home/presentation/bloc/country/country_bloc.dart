@@ -3,13 +3,14 @@ import 'package:hng_2_task/features/features.dart';
 
 class CountriesBloc extends Bloc<CountriesEvent, CountriesState> {
   final CountryRepository repository;
-  PaginatedResponse<Country>? currentResponse;
+  List<Country>? currentResponse;
   CountryFilters? currentFilters;
 
   CountriesBloc(this.repository) : super(CountriesInitial()) {
     on<GetCountries>(_onGetCountries);
     on<SearchCountries>(_onSearchCountries);
     on<ApplyFilters>(_onApplyFilters);
+    on<ChangeLocale>(_onChangeLocale);
   }
 
   Future<void> _onGetCountries(
@@ -23,10 +24,13 @@ class CountriesBloc extends Bloc<CountriesEvent, CountriesState> {
       perPage: event.perPage,
     );
 
-    result.fold((failure) => emit(CountriesError(failure.message)), (response) {
-      currentResponse = response;
-      emit(CountriesLoaded(response));
-    });
+    result.fold(
+      (failure) => emit(CountriesError(failure.message)),
+      (response) {
+        currentResponse = response;
+        emit(CountriesLoaded(response));
+      },
+    );
   }
 
   Future<void> _onSearchCountries(
@@ -40,25 +44,14 @@ class CountriesBloc extends Bloc<CountriesEvent, CountriesState> {
       return Future.value();
     }
 
-    final filteredCountries = currentResponse!.data.where((country) {
-      return country.name?.toLowerCase().contains(event.query.toLowerCase()) ??
-          false;
+    final filteredCountries = currentResponse!.where((country) {
+      final commonName = country.name?.common;
+      if (commonName == null) return false;
+
+      return commonName.toLowerCase().contains(event.query.toLowerCase());
     }).toList();
 
-    final updatedResponse = currentResponse!.copyWith(
-      data: filteredCountries,
-      meta: PaginationMeta(
-        currentPage: currentResponse!.meta.currentPage,
-        from: 1,
-        lastPage: 1,
-        path: currentResponse!.meta.path,
-        perPage: filteredCountries.length,
-        to: filteredCountries.length,
-        total: filteredCountries.length,
-      ),
-    );
-
-    emit(CountriesLoaded(updatedResponse));
+    emit(CountriesLoaded(filteredCountries));
     return Future.value();
   }
 
@@ -68,27 +61,75 @@ class CountriesBloc extends Bloc<CountriesEvent, CountriesState> {
   ) async {
     if (currentResponse == null) return;
 
-    currentFilters = event.filters;
-    final filteredCountries = currentResponse!.data.where((country) {
-      bool matchesContinent = event.filters.continents == null ||
-          event.filters.continents!.contains(country.continent);
+    currentFilters = event.filters
+        .copyWith(locale: currentFilters?.locale ?? event.filters.locale);
 
-      return matchesContinent;
+    final filteredCountries = currentResponse!.where((Country country) {
+      bool matchesContinent = event.filters.continents == null ||
+          (country.continents != null &&
+              country.continents!.isNotEmpty &&
+              event.filters.continents!.any(
+                (continent) => continent == country.continents![0],
+              ));
+
+      bool matchesTimezone = event.filters.timezones == null ||
+          (country.timezones != null &&
+              country.timezones!.any((timezone) {
+                return event.filters.timezones!.contains(timezone);
+              }));
+
+      return matchesContinent && matchesTimezone;
     }).toList();
 
-    final updatedResponse = currentResponse!.copyWith(
-      data: filteredCountries,
-      meta: PaginationMeta(
-        currentPage: 1,
-        from: 1,
-        lastPage: 1,
-        path: currentResponse!.meta.path,
-        perPage: filteredCountries.length,
-        to: filteredCountries.length,
-        total: filteredCountries.length,
-      ),
-    );
+    if (currentFilters?.locale != null) {
+      final locale = currentFilters!.locale!;
 
-    emit(CountriesLoaded(updatedResponse));
+      final translatedCountries = filteredCountries.map((Country country) {
+        final translation = country.translations?[locale];
+        if (translation != null) {
+          return country.copyWith(
+            name: NameModel(
+              common: translation.common,
+              official: translation.official,
+              nativeName: country.name?.nativeName,
+            ),
+          );
+        }
+        return country;
+      }).toList();
+
+      emit(CountriesLoaded(translatedCountries, currentLocale: locale));
+    } else {
+      emit(CountriesLoaded(filteredCountries));
+    }
+  }
+
+  Future<void> _onChangeLocale(
+    ChangeLocale event,
+    Emitter<CountriesState> emit,
+  ) async {
+    if (currentResponse == null) return;
+
+    currentFilters =
+        (currentFilters ?? CountryFilters()).copyWith(locale: event.locale);
+
+    final translatedCountries = currentResponse!.map((country) {
+      final translation = country.translations?[event.locale];
+      if (translation != null) {
+        return country.copyWith(
+          name: NameModel(
+            common: translation.common,
+            official: translation.official,
+            nativeName: country.name?.nativeName,
+          ),
+        );
+      }
+      return country;
+    }).toList();
+
+    emit(CountriesLoaded(
+      translatedCountries,
+      currentLocale: event.locale,
+    ));
   }
 }

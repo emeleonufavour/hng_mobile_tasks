@@ -11,14 +11,14 @@ class CountryTile extends StatelessWidget {
     return Row(
       children: [
         Hero(
-          tag: country.href!.flag!,
+          tag: country.flags?.png ?? '',
           child: ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: ImageWidget(
               fit: BoxFit.cover,
               height: 40.h,
               width: 40.w,
-              url: country.href?.flag ?? "",
+              url: country.flags?.png ?? "",
             ),
           ),
         ),
@@ -30,9 +30,9 @@ class CountryTile extends StatelessWidget {
             SizedBox(
               width: 200,
               child: Hero(
-                tag: country.name ?? "No name recorded",
+                tag: country.name?.common ?? "No name recorded",
                 child: TextWidget(
-                  country.name ?? "",
+                  country.name?.common ?? "No name recorded",
                   fontWeight: FontWeight.w400,
                   fontSize: 14.sp,
                   textColor: Theme.of(context).textTheme.bodyLarge?.color,
@@ -41,9 +41,7 @@ class CountryTile extends StatelessWidget {
             ),
             const SizedBox(height: 5),
             TextWidget(
-              country.capital!.isNotEmpty
-                  ? country.capital!
-                  : 'No capital recorded',
+              country.capital?.firstOrNull ?? 'No capital recorded',
               fontWeight: FontWeight.w400,
               fontSize: 14.sp,
               textColor: Theme.of(context).colorScheme.secondary,
