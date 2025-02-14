@@ -36,6 +36,8 @@ class _CountryImagesCarouselState extends State<CountryImagesCarousel> {
   @override
   Widget build(BuildContext context) {
     final bool hasMultipleImages = widget.coatOfArmsUrl != null;
+    final size = MediaQuery.sizeOf(context);
+    final imageHeight = (size.height * 0.3);
 
     return SizedBox(
       height: 200.h,
@@ -54,7 +56,7 @@ class _CountryImagesCarouselState extends State<CountryImagesCarousel> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: ImageWidget(
-                    height: 200.h,
+                    height: imageHeight,
                     width: double.maxFinite,
                     fit: BoxFit.cover,
                     url: widget.flagUrl,
@@ -64,7 +66,7 @@ class _CountryImagesCarouselState extends State<CountryImagesCarousel> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: ImageWidget(
-                      height: 200.h,
+                      height: imageHeight,
                       width: double.maxFinite,
                       fit: BoxFit.contain,
                       url: widget.coatOfArmsUrl!,
