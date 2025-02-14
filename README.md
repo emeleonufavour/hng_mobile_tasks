@@ -13,6 +13,6 @@ The following are relevant links for each stage
 
 ## Stage 2
 
-- [App on Appetizor](https://appetize.io/app/b_unrxyihb2w5thwuuyaubvda2ea)
+- [App on Appetizor](https://appetize.io/app/b_scsx7kx2l2xsldksmrwfgqk53q)
 - [Link to repository](https://github.com/emeleonufavour/hng_mobile_tasks/tree/main/hng_2_task)
 

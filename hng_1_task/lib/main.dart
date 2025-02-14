@@ -10,6 +10,7 @@ void main() {
   runApp(const MyApp());
 }
 
+// https://appetize.io/app/b_gttqac7nc5fnui6jp3e2kuxgvq
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
