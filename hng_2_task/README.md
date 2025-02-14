@@ -73,9 +73,9 @@ A Flutter mobile app that gives you the ability to view countries and their info
 
 - Run the app
 
-```bash
-flutter run
-```
+  ```bash
+  flutter run
+  ```
 
 ## Platform compability
 
