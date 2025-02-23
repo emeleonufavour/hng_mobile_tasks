@@ -15,6 +15,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String? selectedAnimation;
   List<String> animationsList = [];
 
+  double model1Angle = -90;
+  double model2Angle = 90;
+
   @override
   void initState() {
     super.initState();
@@ -25,6 +28,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String model1 = "assets/female-talk.glb";
   String model2 = "assets/female-talk2.glb";
+
+  void rotateModel1(bool clockwise) {
+    setState(() {
+      model1Angle += clockwise ? -45 : 45;
+      controller.setCameraOrbit(model1Angle, 80, 120.0);
+    });
+  }
+
+  void rotateModel2(bool clockwise) {
+    setState(() {
+      model2Angle += clockwise ? -45 : 45;
+      controller2.setCameraOrbit(model2Angle, 80, 120.0);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     onLoad: (String modelAddress) {
                       debugPrint('model loaded : $modelAddress');
-                      controller.setCameraOrbit(-90, 80, 120.0);
+                      controller.setCameraOrbit(model1Angle, 80, 120.0);
                     },
                   ),
                 ),
@@ -59,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     onLoad: (String modelAddress) {
                       debugPrint('model loaded : $modelAddress');
-                      controller2.setCameraOrbit(90, 80, 120.0);
+                      controller2.setCameraOrbit(model2Angle, 80, 120.0);
                     },
                   ),
                 ),
@@ -68,47 +85,76 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           if (Theme.of(context).platform == TargetPlatform.android ||
               Theme.of(context).platform == TargetPlatform.iOS)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Column(
               children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    controller.playAnimation();
-                    Future.delayed(Duration(seconds: 10), () {
-                      controller.stopAnimation();
-                    });
-                  },
-                  child: const Text('Talk'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    controller2.playAnimation();
-                    Future.delayed(Duration(seconds: 10), () {
-                      controller2.stopAnimation();
-                    });
-                  },
-                  child: const Text('Talk'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.rotate_left),
+                          onPressed: () => rotateModel1(false),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            controller.playAnimation();
+                            Future.delayed(Duration(seconds: 10), () {
+                              controller.stopAnimation();
+                            });
+                          },
+                          child: const Text('Talk'),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.rotate_right),
+                          onPressed: () => rotateModel1(true),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.rotate_left),
+                          onPressed: () => rotateModel2(false),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            controller2.playAnimation();
+                            Future.delayed(Duration(seconds: 10), () {
+                              controller2.stopAnimation();
+                            });
+                          },
+                          child: const Text('Talk'),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.rotate_right),
+                          onPressed: () => rotateModel2(true),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             )
           else
             KeyboardListener(
-                focusNode: FocusNode(),
-                onKeyEvent: (value) {
-                  if (value is KeyDownEvent) {
-                    switch (value.logicalKey.keyLabel) {
-                      case 'Space':
-                        controller.playAnimation();
-                        controller2.playAnimation();
-                        Future.delayed(Duration(seconds: 10), () {
-                          controller.stopAnimation();
-                          controller2.stopAnimation();
-                        });
-                        break;
-                    }
+              focusNode: FocusNode(),
+              onKeyEvent: (value) {
+                if (value is KeyDownEvent) {
+                  switch (value.logicalKey.keyLabel) {
+                    case 'Space':
+                      controller.playAnimation();
+                      controller2.playAnimation();
+                      Future.delayed(Duration(seconds: 10), () {
+                        controller.stopAnimation();
+                        controller2.stopAnimation();
+                      });
+                      break;
                   }
-                },
-                child: Container())
+                }
+              },
+              child: Container(),
+            )
         ],
       ),
     );
